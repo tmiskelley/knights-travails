@@ -2,6 +2,8 @@
 
 # Represents individual square on chess board
 class Square
+  attr_reader :position, :children
+
   MOVES = [
     [1, 2], [-2, -1], [-1, 2], [2, -1],
     [1, -2], [-2, 1], [-1, -2], [2, 1]
@@ -17,4 +19,9 @@ class Square
     children.reject! { |arr| arr.reject!(&:negative?) }
     children
   end
+end
+
+def knight_moves(start, finish)
+  start_square = Square.new(start)
+  return [start, finish] if start_square.children.any? { |arr| arr == finish }
 end
