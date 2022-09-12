@@ -21,6 +21,25 @@ class Square
   end
 end
 
+# Represents an 8x8 chess game board, comprised of 64 square nodes
+class GameBoard
+  attr_reader :squares
+
+  def initialize
+    @squares = []
+    create_squares
+  end
+
+  def create_squares
+    coordinates = [*0..7].repeated_permutation(2).to_a
+    coordinates.each { |arr| @squares.push(Square.new(arr)) }
+  end
+
+  def print_board
+    squares.each { |square| puts "#{square.position} -> #{square.children}" }
+  end
+end
+
 def knight_moves(start, finish)
   start_square = Square.new(start)
   return [start, finish] if start_square.children.any? { |arr| arr == finish }
