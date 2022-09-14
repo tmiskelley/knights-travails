@@ -35,12 +35,17 @@ class GameBoard
     coordinates.each { |arr| @squares.push(Square.new(arr)) }
   end
 
+  def find(coordinate)
+    @squares.each do |square|
+      return square if square.position == coordinate
+    end
+  end
+
   def print_board
-    squares.each { |square| puts "#{square.position} -> #{square.children}" }
+    squares.each { |square| p square }
   end
 end
 
 def knight_moves(start, finish)
-  start_square = Square.new(start)
-  return [start, finish] if start_square.children.any? { |arr| arr == finish }
+  return [start, finish] if Square.new(start).children.any? { |arr| arr == finish }
 end
