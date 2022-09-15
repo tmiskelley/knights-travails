@@ -46,6 +46,28 @@ class GameBoard
   end
 end
 
+# Represents chess knight, generating and storing it's moves
+class Knight
+  def initialize(start, finish)
+    @board = GameBoard.new
+    @start = @board.find(start)
+    @finish = finish
+  end
+
+  def move_knight(current_square = @start, queue = [], array = [])
+    array.push(current_square.position)
+    current_square.children.each { |arr| queue.push(arr) }
+    if current_square.children.any? { |arr| arr == @finish }
+      array.push(@finish)
+      return
+    end
+    move_knight(@board.find(queue.shift), queue, array)
+    array
+  end
+end
+
 def knight_moves(start, finish)
   return [start, finish] if Square.new(start).children.any? { |arr| arr == finish }
+
+  Knight.new(start, finish).move_knight
 end
