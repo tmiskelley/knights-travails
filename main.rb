@@ -39,6 +39,7 @@ class GameBoard
     @squares.each do |square|
       return square if square.position == coordinate
     end
+    raise "Square #{coordinate} could not be found."
   end
 
   def print_board
@@ -71,3 +72,5 @@ def knight_moves(start, finish)
 
   Knight.new(start, finish).move_knight
 end
+
+knight_moves([3, 3], [7, 7])
