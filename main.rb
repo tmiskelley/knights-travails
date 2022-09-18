@@ -16,7 +16,7 @@ class Square
 
   def add_children(coordinate)
     children = MOVES.map { |arr| [coordinate[0] + arr[0], coordinate[1] + arr[1]] }
-    children.reject! { |arr| arr.reject!(&:negative?) }
+    children.reject! { |arr| arr.reject! { |e| e > 7 || e.negative? } }
     children
   end
 end
@@ -72,5 +72,3 @@ def knight_moves(start, finish)
 
   Knight.new(start, finish).move_knight
 end
-
-knight_moves([3, 3], [7, 7])
