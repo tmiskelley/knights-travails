@@ -51,19 +51,25 @@ end
 class Knight
   def initialize(start, finish)
     @board = GameBoard.new
-    @start = @board.find(start)
+    @start = start
     @finish = finish
   end
 
-  def move_knight(current_square = @start, queue = [], array = [])
-    array.push(current_square.position)
-    current_square.children.each { |arr| queue.push(arr) }
-    if current_square.children.any? { |arr| arr == @finish }
-      array.push(@finish)
-      return
+  def move_knight(coordinate = @start, queue = [], visited = [])
+    current_square = @board.find(coordinate)
+    finish_found = false
+
+    visited.push(coordinate)
+    current_square.children.each do |arr|
+      if arr == @finish
+        visited.push(@finish)
+        finish_found = true
+        break
+      end
+      queue.unshift(arr) unless queue.include?(arr) || visited.include?(arr)
     end
-    move_knight(@board.find(queue.shift), queue, array)
-    array
+    move_knight(queue.shift, queue, visited) unless finish_found
+    visited
   end
 end
 
