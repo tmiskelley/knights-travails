@@ -2,7 +2,8 @@
 
 # Models an individual sqaure on chess board
 class Square
-  attr_reader :value, :parent, :children
+  attr_accessor :parent
+  attr_reader :value, :children
 
   MOVES = [
     [-2, -1], [-2, 1], [-1, -2], [-1, 2],
@@ -51,4 +52,42 @@ class GameBoard
       .each { |arr| coordinates.push(Square.new(arr)) }
     coordinates
   end
+end
+
+# Models chess knight piece, utilizing BFS graph traversal for movement simulation
+class Knight
+  def initialize(start, finish)
+    @start = start
+    @finish = finish
+    @board = GameBoard.new
+  end
+
+  def search(spot = @start, queue = [], visited = [])
+    current_square = @board.find_square(spot)
+    return path(current_square) if spot == @finish
+
+    visited.push(spot)
+
+    current_square.children.each do |coordinate|
+      next if visited.include?(coordinate)
+
+      child = @board.find_square(coordinate)
+
+      child.parent = spot
+      queue.push(child.value) unless queue.include?(child.value) || visited.include?(child.value)
+    end
+    search(queue.shift, queue, visited)
+  end
+
+  def path(current_node, array = [])
+    array.unshift(current_node.value)
+    path(@board.find_square(current_node.parent), array) unless current_node.parent.nil?
+    array
+  end
+end
+
+def knight_moves(start, finish)
+  return [start, finish] if start == finish
+
+  Knight.new(start, finish).search
 end
