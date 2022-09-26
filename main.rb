@@ -5,17 +5,17 @@ class Square
   attr_reader :position, :children
 
   MOVES = [
-    [1, 2], [-2, -1], [-1, 2], [2, -1],
-    [1, -2], [-2, 1], [-1, -2], [2, 1]
+    [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+    [1, -2], [1, 2], [2, -1], [2, 1]
   ].freeze
 
   def initialize(data)
     @position = data
-    @children = add_children(@position)
+    @children = add_children
   end
 
-  def add_children(coordinate)
-    children = MOVES.map { |arr| [coordinate[0] + arr[0], coordinate[1] + arr[1]] }
+  def add_children
+    children = MOVES.map { |arr| [@position[0] + arr[0], @position[1] + arr[1]] }
     children.reject! { |arr| arr.reject! { |e| e > 7 || e.negative? } }
     children
   end
@@ -45,36 +45,4 @@ class GameBoard
   def print_board
     squares.each { |square| p square }
   end
-end
-
-# Represents chess knight, generating and storing it's moves
-class Knight
-  def initialize(start, finish)
-    @board = GameBoard.new
-    @start = start
-    @finish = finish
-  end
-
-  def move_knight(coordinate = @start, queue = [], visited = [])
-    current_square = @board.find(coordinate)
-    finish_found = false
-
-    visited.push(coordinate)
-    current_square.children.each do |arr|
-      if arr == @finish
-        visited.push(@finish)
-        finish_found = true
-        break
-      end
-      queue.unshift(arr) unless queue.include?(arr) || visited.include?(arr)
-    end
-    move_knight(queue.shift, queue, visited) unless finish_found
-    visited
-  end
-end
-
-def knight_moves(start, finish)
-  return [start, finish] if Square.new(start).children.any? { |arr| arr == finish }
-
-  Knight.new(start, finish).move_knight
 end
