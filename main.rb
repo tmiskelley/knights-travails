@@ -89,5 +89,7 @@ end
 def knight_moves(start, finish)
   return [start, finish] if start == finish
 
-  Knight.new(start, finish).search
+  path = Knight.new(start, finish).search
+  puts "You made it in #{path.size - 1} moves! Heres your path:"
+  path.each { |arr| p arr }
 end
