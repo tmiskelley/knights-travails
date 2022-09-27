@@ -79,6 +79,8 @@ class Knight
     search(queue.shift, queue, visited)
   end
 
+  private
+
   def path(current_node, array = [])
     array.unshift(current_node.value)
     path(@board.find_square(current_node.parent), array) unless current_node.parent.nil?
